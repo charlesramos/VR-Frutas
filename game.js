@@ -84,9 +84,9 @@ function drawFruits() {
 // Movimentar a cesta com o giroscópio
 if (window.DeviceOrientationEvent) {
   window.addEventListener('deviceorientation', (event) => {
-    const gamma = event.gamma; // Inclinação no eixo X
-    if (gamma) {
-      basketX += gamma * 2;
+    const beta = event.beta; // Inclinação no eixo X
+    if (beta) {
+      basketX += beta * 1;
       basketX = Math.max(0, Math.min(canvas.width - basketWidth, basketX));
     }
   });
