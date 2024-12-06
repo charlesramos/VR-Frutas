@@ -86,7 +86,7 @@ if (window.DeviceOrientationEvent) {
   window.addEventListener('deviceorientation', (event) => {
     const gamma = event.gamma; // Inclinação no eixo X
     if (gamma) {
-      basketX += gamma * 1;
+      basketX += gamma * 2;
       basketX = Math.max(0, Math.min(canvas.width - basketWidth, basketX));
     }
   });
