@@ -4,22 +4,44 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let basketX = canvas.width / 2;
+let basketX = canvas.width / 2 - 50;
 const basketWidth = 100;
-const basketHeight = 20;
+const basketHeight = 50;
+const basketY = canvas.height - basketHeight - 10;
 let score = 0;
-
-// Lista de frutinhas
-const fruits = [];
-const fruitRadius = 15;
 
 // Atualizar pontuação
 const scoreElement = document.getElementById('score');
 
+// Lista de imagens das frutas
+const fruitImages = [
+  'imagens/banana.png',
+  'imagens/maca.png',
+  'imagens/melancia.png',
+];
+
+// Lista de frutinhas
+const fruits = [];
+
+// Carregar imagens
+const loadedImages = fruitImages.map((src) => {
+  const img = new Image();
+  img.src = src;
+  return img;
+});
+
 // Adicionar frutinhas
 function addFruit() {
-  const x = Math.random() * (canvas.width - 2 * fruitRadius) + fruitRadius;
-  fruits.push({ x, y: 0, speed: Math.random() * 3 + 2 });
+  const x = Math.random() * (canvas.width - 50) + 25; // Garantir que a fruta não saia pelas bordas
+  const imageIndex = Math.floor(Math.random() * loadedImages.length);
+  fruits.push({
+    x,
+    y: 0,
+    speed: Math.random() * 3 + 2,
+    image: loadedImages[imageIndex],
+    width: 50,
+    height: 50,
+  });
 }
 
 // Atualizar posição das frutinhas
@@ -30,8 +52,8 @@ function updateFruits() {
 
     // Verificar colisão com a cesta
     if (
-      fruit.y + fruitRadius >= canvas.height - basketHeight &&
-      fruit.x > basketX &&
+      fruit.y + fruit.height >= basketY &&
+      fruit.x + fruit.width > basketX &&
       fruit.x < basketX + basketWidth
     ) {
       fruits.splice(i, 1);
@@ -49,16 +71,13 @@ function updateFruits() {
 // Desenhar a cesta
 function drawBasket() {
   ctx.fillStyle = '#8B4513';
-  ctx.fillRect(basketX, canvas.height - basketHeight, basketWidth, basketHeight);
+  ctx.fillRect(basketX, basketY, basketWidth, basketHeight);
 }
 
 // Desenhar frutinhas
 function drawFruits() {
-  ctx.fillStyle = '#FF6347';
-  fruits.forEach(fruit => {
-    ctx.beginPath();
-    ctx.arc(fruit.x, fruit.y, fruitRadius, 0, Math.PI * 2);
-    ctx.fill();
+  fruits.forEach((fruit) => {
+    ctx.drawImage(fruit.image, fruit.x, fruit.y, fruit.width, fruit.height);
   });
 }
 
